@@ -17,6 +17,7 @@ export default class MyListView extends React.Component {
     componentWillMount() {
         let tempData = [];
         for(this.i = 0; this.i < 20; this.i++) {
+            console.log('>>>>>>>> Rendering Row:', this.i);
             tempData.push(<Row data={myData[this.i]}/>);
         }
         this.setState({
@@ -40,6 +41,7 @@ export default class MyListView extends React.Component {
             let currentI = this.i;
             let temp = [];
             for(; this.i < Math.min(currentI + 5, myData.length); this.i += 1) {
+                console.log('>>>>>>>> Rendering Row:', this.i);
                 temp.push(<Row data={myData[this.i]}/>);
             }
             this.setState({
