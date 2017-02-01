@@ -27,17 +27,18 @@ export default class MyListView extends React.Component {
 
     render() {
         return(
-            <ScrollView onScroll={this._onScroll} scrollEventThrottle={16}>
+            <ScrollView onScroll={this._onScroll} scrollEventThrottle={50}>
                 {this.state.data}
             </ScrollView>
         )
     }
 
-    _onScroll = (event) => {
-        var currentOffset = event.nativeEvent.contentOffset.y;
-        var directionIsDown = currentOffset > this.offset;
-        this.offset = currentOffset;
-        if(!directionIsDown) {
+    _onScroll = (e) => {
+        let currentOffset = e.nativeEvent.contentOffset.y;
+        let contentSize = e.nativeEvent.contentSize.height;
+        let directionIsDown = currentOffset > this.offset;
+        console.log(currentOffset, e.nativeEvent.contentSize, this.i);
+        if(directionIsDown && contentSize - currentOffset < 1100) {
             let currentI = this.i;
             let temp = [];
             for(; this.i < Math.min(currentI + 5, myData.length); this.i += 1) {
@@ -46,7 +47,8 @@ export default class MyListView extends React.Component {
             }
             this.setState({
                 data: this.state.data.concat(temp),
-            })
+            });
+            this.offset = currentOffset;
         }
     }
 }

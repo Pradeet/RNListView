@@ -4,6 +4,7 @@ export default StyleSheet.create({
     container: {
         flexDirection: 'row',
         paddingTop: 5,
+        height: 150,
     },
     image: {
         height: 100,
