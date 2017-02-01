@@ -4,9 +4,24 @@ import {ScrollView} from 'react-native';
 import Row from '../ListViewRow'
 import myData from '../../data/myData';
 
+let DEFAULT_INITIAL_ROWS = 20;
+let DEFAULT_SCROLL_RENDER_AHEAD = 1500;
+let DEFAULT_END_REACHED_THRESHOLD = 1000;
+var DEFAULT_SCROLL_CALLBACK_THROTTLE = 50;
+
 export default class MyListView extends React.Component {
+
+    static defaultProps = {
+        initialListSize: DEFAULT_INITIAL_ROWS,
+        scrollRenderAheadDistance: DEFAULT_SCROLL_RENDER_AHEAD,
+        scrollCallbackThrottle: DEFAULT_SCROLL_CALLBACK_THROTTLE,
+    };
+
     constructor(props) {
         super(props);
+
+
+
         i = 0;
         this.offset=0;
         this.state = {
@@ -27,18 +42,19 @@ export default class MyListView extends React.Component {
 
     render() {
         return(
-            <ScrollView onScroll={this._onScroll} scrollEventThrottle={50}>
+            <ScrollView style={{margin: 5}} onScroll={this._onScroll} scrollEventThrottle={this.props.scrollCallbackThrottle} horizontal={false}>
                 {this.state.data}
             </ScrollView>
         )
     }
 
     _onScroll = (e) => {
-        let currentOffset = e.nativeEvent.contentOffset.y;
-        let contentSize = e.nativeEvent.contentSize.height;
-        let directionIsDown = currentOffset > this.offset;
+        currentOffset = e.nativeEvent.contentOffset.y;
+        contentSize = e.nativeEvent.contentSize.height;
+        directionIsDown = currentOffset > this.offset;
+
         console.log(currentOffset, e.nativeEvent.contentSize, this.i);
-        if(directionIsDown && contentSize - currentOffset < 1100) {
+        if(directionIsDown && contentSize - currentOffset < this.props.scrollRenderAheadDistance) {
             let currentI = this.i;
             let temp = [];
             for(; this.i < Math.min(currentI + 5, myData.length); this.i += 1) {
@@ -50,5 +66,5 @@ export default class MyListView extends React.Component {
             });
             this.offset = currentOffset;
         }
-    }
+    };
 }
